@@ -6,8 +6,8 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def fetch_all_posts():
-    base_url = "https://kemono.party/api/v1/patreon/user/24146169"
+def fetch_all_posts(user_id=""):
+    base_url = f"https://kemono.party/api/v1/patreon/user/{user_id}"
     all_posts = []
     offset = 0
 
@@ -69,13 +69,15 @@ def confirm_post_read(post_filename, post_content):
     with open(post_filename, 'w', encoding='utf-8') as output_file:
         output_file.write(post_content)
 
-def filter_and_save_posts(posts, filter_text="Newly Summoned Demoness", filename="filtered_posts.json"):
+def filter_and_save_posts(posts, filter_text, filename="filtered_posts.json"):
     filtered_posts = [post for post in posts if filter_text in post.get("title", "")]
     
     with open(filename, 'w', encoding='utf-8') as file:
         json.dump(filtered_posts, file, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
+    user = ""
+    filter_text = ""
     # Fetch, sort, and save posts
-    all_posts = fetch_all_posts()
-    filter_and_save_posts(all_posts)
+    all_posts = fetch_all_posts(user)
+    filter_and_save_posts(all_posts, filter_text)
