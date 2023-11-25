@@ -75,9 +75,24 @@ def filter_and_save_posts(posts, filter_text, filename="filtered_posts.json"):
     with open(filename, 'w', encoding='utf-8') as file:
         json.dump(filtered_posts, file, ensure_ascii=False, indent=4)
 
+import subprocess   
+def run_royal_road_scraper(royal_road_id: str, name: str):
+    # Run code in ./royalroad-api using node
+    command = ["node", ".", royal_road_id, f"../fetchdata/{name}.json"]
+    subprocess.run(command, check=True, cwd="./royalroad-api")
+
 if __name__ == "__main__":
-    user = "24146169"
+    # user = "24146169"
     filter_text = "Newly Summoned Demoness"
+    # name="filtered_posts"
+    user = "67742"
+    name="filtered_posts_elydes"
+    mode="royalroad"
     # Fetch, sort, and save posts
-    all_posts = fetch_all_posts(user)
-    filter_and_save_posts(all_posts, filter_text)
+    if mode == "royalroad":
+        run_royal_road_scraper(user, name)
+    elif mode == "kemono":
+        all_posts = fetch_all_posts(user)
+        filter_and_save_posts(all_posts, filter_text, filename=f"fetchdata/{name}.json")
+    else:
+        raise Exception("Invalid mode provided")

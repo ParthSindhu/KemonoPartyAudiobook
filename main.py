@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import subprocess
-from bookreader.bookscraper import read_next_post, confirm_post_read
+from bookscraper import read_next_post, confirm_post_read
 from openai import OpenAI
 import logging
 
@@ -92,5 +92,5 @@ def main(posts_filename, file_path = None):
 
 if __name__ == "__main__":
     # main('book.txt') # override default behavior
-    # main(posts_filename="filtered_posts_demoness.json")
-    main(posts_filename="filtered_posts.json")
+    # main(posts_filename="fetchdata/filtered_posts_demoness.json")
+    main(posts_filename="fetchdata/filtered_posts_elydes.json")
