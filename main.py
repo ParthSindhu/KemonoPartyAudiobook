@@ -1,11 +1,14 @@
 import os
 from pathlib import Path
 import subprocess
-from kemono_bookscraper import read_next_post, confirm_post_read
+from bookreader.bookscraper import read_next_post, confirm_post_read
 from openai import OpenAI
 import logging
 
-client = OpenAI(api_key="<api-key>")
+# Read api key from .env
+from dotenv import load_dotenv
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -16,7 +19,8 @@ def read_book(file_path):
         return file.read()
 
 def chunk_text(input_text, max_length=4096):
-    paragraphs = input_text.split('\n\n')
+    cleaned_text = input_text.replace('[', '').replace(']', '')
+    paragraphs = cleaned_text.split('\n\n')
     chunks = []
     current_chunk = ""
 
@@ -47,11 +51,13 @@ def combine_audio(files, output_path):
     command = ["ffmpeg", "-y", "-i", "concat:" + "|".join(files), "-acodec", "copy", output_path]
     subprocess.run(command, check=True)
 
-def main(file_path = None):
-    if file_path is None:
-        result = read_next_post()
-    else:
+def main(posts_filename, file_path = None):
+    if file_path is None and posts_filename is not None:
+        result = read_next_post(posts_filename)
+    elif file_path is not None:
         result = file_path, read_book(file_path)
+    else:
+        raise Exception("No file path or posts filename provided")
     if result is None:
         logging.info("No more posts to read")
         return
@@ -85,5 +91,6 @@ def main(file_path = None):
     confirm_post_read(filename, book_text)
 
 if __name__ == "__main__":
-    # main(book_file_path) # override default behavior
-    main()
+    # main('book.txt') # override default behavior
+    # main(posts_filename="filtered_posts_demoness.json")
+    main(posts_filename="filtered_posts.json")

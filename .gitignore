@@ -3,3 +3,5 @@ temp_audio_files
 __pycache__
 books
 filtered_posts.json
+fetchdata
+.env

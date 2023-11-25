@@ -1,0 +1,3 @@
+[submodule "royalroad-api"]
+	path = royalroad-api
+	url = https://github.com/fs-c/royalroad-api.git

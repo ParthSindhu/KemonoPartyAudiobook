@@ -76,8 +76,8 @@ def filter_and_save_posts(posts, filter_text, filename="filtered_posts.json"):
         json.dump(filtered_posts, file, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
-    user = ""
-    filter_text = ""
+    user = "24146169"
+    filter_text = "Newly Summoned Demoness"
     # Fetch, sort, and save posts
     all_posts = fetch_all_posts(user)
     filter_and_save_posts(all_posts, filter_text)
